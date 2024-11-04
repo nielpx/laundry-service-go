@@ -12,11 +12,11 @@ func main() {
 	database.ConnectDatabase()
 
 
-	r.GET("/api/products", api.Index)
-	r.GET("/api/products/:id", api.Show)
-	r.POST("/api/products", api.Create)
-	r.PUT("/api/products/:id", api.Update)
-	r.DELETE("/api/products/:id", api.Delete)
+	r.GET("/laundry-services", controllers.Index)
+	r.GET("/laundry-services/:id", controllers.Show)
+	r.POST("/laundry-services", controllers.Create)
+	r.PUT("/laundry-services/:id", controllers.Update)
+	r.DELETE("/laundry-services/:id", controllers.Delete)
 
 	r.Run()
 }
