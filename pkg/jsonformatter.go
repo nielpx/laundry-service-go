@@ -20,7 +20,7 @@ type ShowResponse struct {
     Code      int             `json:"code"`
 	Status    string          `json:"status"`
 	Message   string		  `json:"message"`
-    Products  models.Product `json:"data"`
+    Products  models.Product  `json:"data"`
 }
 
 // Response struct for Create
@@ -28,7 +28,7 @@ type CreateResponse struct {
     Code      int             `json:"code"`
 	Status    string          `json:"status"`
 	Message   string		  `json:"message"`
-    Products  models.Product `json:"data"`
+    Products  models.Product  `json:"data"`
 }
 
 // Response struct for Update
@@ -36,7 +36,7 @@ type UpdateResponse struct {
 	Code      int             `json:"code"`
 	Status    string          `json:"status"`
 	Message   string		  `json:"message"`
-    Products  models.Product `json:"data"`
+    Products  models.Product  `json:"data"`
 }
 
 // Response struct for Delete

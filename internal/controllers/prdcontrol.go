@@ -5,7 +5,6 @@ import (
 	"golang-gorm-gin/internal/models"
 	"golang-gorm-gin/pkg"
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )

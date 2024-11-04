@@ -3,7 +3,6 @@ package main
 import (
 	"golang-gorm-gin/internal/controllers"
 	"golang-gorm-gin/internal/database"
-
 	"github.com/gin-gonic/gin"
 )
 
