@@ -1,6 +1,8 @@
-package models
+package database
 
 import (
+	"golang-gorm-gin/internal/models"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -13,7 +15,7 @@ func ConnectDatabase()  {
 		panic(err)
 	}
 
-	database.AutoMigrate(&Product{})
+	database.AutoMigrate(&models.Product{})
 
 	DB = database
 }

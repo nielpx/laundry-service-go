@@ -1,16 +1,18 @@
-package prdcontrol
+package api
 
 import (
-	"golang-gorm-gin/models"
+	"golang-gorm-gin/internal/database"
+	"golang-gorm-gin/internal/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
+
 func Index(c *gin.Context) {
 	var products []models.Product
-	models.DB.Find(&products)
+	database.DB.Find(&products)
 	c.JSON(http.StatusOK, gin.H{"products": products})
 }
 
@@ -18,7 +20,7 @@ func Show(c *gin.Context) {
 	var products models.Product
 	id := c.Param("id")
 
-	if err := models.DB.First(&products, id).Error; err != nil{
+	if err := database.DB.First(&products, id).Error; err != nil{
 		switch err {
 		case gorm.ErrRecordNotFound:
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message" : "not found"})
@@ -38,7 +40,7 @@ func Create(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	models.DB.Create(&products)
+	database.DB.Create(&products)
 	c.JSON(http.StatusOK, gin.H{"products" : products})
 
 }
@@ -51,7 +53,7 @@ func Update(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	if models.DB.Model(&products).Where("id = ?", id).Updates(&products).RowsAffected == 0{
+	if database.DB.Model(&products).Where("id = ?", id).Updates(&products).RowsAffected == 0{
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message" : "not able to change"})
 		return
 	}
@@ -66,7 +68,7 @@ func Delete(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	if models.DB.Model(&products).Where("id = ?", id).Delete(&products).RowsAffected == 0{
+	if database.DB.Model(&products).Where("id = ?", id).Delete(&products).RowsAffected == 0{
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message" : "not able to change"})
 		return
 	}
