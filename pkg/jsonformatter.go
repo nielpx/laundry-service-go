@@ -47,6 +47,19 @@ type DeleteResponse struct {
     Products  *models.Product `json:"data"`
 }
 
+type ErrGetResponse struct {
+    Code      int             `json:"code"`
+	Status    string          `json:"status"`
+	Message   string		  `json:"message"`
+    Products *[]models.Product `json:"data"`
+}
+
+type ErrUpdateResponse struct {
+    Code      int             `json:"code"`
+	Status    string          `json:"status"`
+	Message   string		  `json:"message"`
+    Products *models.Product `json:"data"`
+}
 // Response variables for Index
 func NewIndexResponse(products []models.Product) IndexResponse {
     return IndexResponse{
@@ -95,3 +108,23 @@ func NewDeleteResponse(product models.Product) DeleteResponse {
         Products: nil,
     }
 }
+
+func NewErrGetResponse(product models.Product) ErrGetResponse {
+    return ErrGetResponse{
+		Code:      http.StatusNotFound,
+		Status: "error",
+		Message: "Laundry service not found",
+        Products: nil,
+    }
+}
+
+func NewErrUpdateResponse(product models.Product) ErrUpdateResponse {
+    return ErrUpdateResponse{
+		Code:      http.StatusNotFound,
+		Status: "error",
+		Message: "Laundry service not found",
+        Products: nil,
+    }
+}
+
+

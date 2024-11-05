@@ -20,11 +20,11 @@ func Index(c *gin.Context) {
 func Show(c *gin.Context) {
 	var products models.Product
 	id := c.Param("id")
-
 	if err := database.DB.First(&products, id).Error; err != nil{
 		switch err {
 		case gorm.ErrRecordNotFound:
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message" : "not found"})
+			resErr := pkg.NewErrGetResponse(products)
+			c.AbortWithStatusJSON(http.StatusNotFound, resErr)
 			return
 		default:
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message" : "error occured"})
@@ -58,7 +58,8 @@ func Update(c *gin.Context) {
 		return
 	}
 	if database.DB.Model(&products).Where("id = ?", id).Updates(&products).RowsAffected == 0{
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message" : "not able to change"})
+		resErr := pkg.NewUpdateResponse(products)
+		c.AbortWithStatusJSON(http.StatusNotFound, resErr)
 		return
 	}
 	response := pkg.NewUpdateResponse(products)
