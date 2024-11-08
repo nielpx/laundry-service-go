@@ -45,7 +45,6 @@ func (h *LayananHandler) GetLayanan(c *gin.Context){
 	}
 	response := pkg.NewResponse(http.StatusOK, "Laundry services retrieved successfully", products)
 	c.JSON(http.StatusOK, response)
-
 }
 
 func (h *LayananHandler) CreateLayanan(c *gin.Context){
@@ -58,7 +57,18 @@ func (h *LayananHandler) CreateLayanan(c *gin.Context){
 	if err := h.layananUseCase.CreateLayanan(&products) ; err != nil{
 		resErr := pkg.NewErrResponse(http.StatusBadRequest, "Can't create service")
 		c.AbortWithStatusJSON(http.StatusBadRequest, resErr)
+		return
 	}
+
+	// token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+	// 	"sub": products.Id,
+	// 	"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
+	// })
+	// tokenString, _ := token.SignedString([]byte(env.SECRET))
+	
+	// c.SetSameSite(http.SameSiteLaxMode)
+	// c.SetCookie("Authoratization", tokenString, 3600 * 24 * 30, "", "", false, true)
+
 	response := pkg.NewResponse(http.StatusCreated, "Laundry services created successfully", products)
 	c.JSON(http.StatusOK, response)
 }

@@ -35,6 +35,7 @@ func (u *layananRepository) CreateLayanan(product *models.Product) error{
 func (u *layananRepository) UpdateLayanan(id int, product *models.Product) error{
 	return u.layananRepo.Update(id, product)
 }
+
 func (u *layananRepository) DeleteLayanan(id int) error {
     return u.layananRepo.Delete(id)
 }

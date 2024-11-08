@@ -7,6 +7,8 @@ require (
 	gorm.io/gorm v1.25.12
 )
 
+require github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
+
 require (
 	github.com/bytedance/sonic v1.12.3 // indirect
 	github.com/bytedance/sonic/loader v0.2.1 // indirect

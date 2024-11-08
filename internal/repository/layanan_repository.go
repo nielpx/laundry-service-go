@@ -17,7 +17,6 @@ type layananRepository struct{
 	db *gorm.DB
 }
 
-
 func NewLayananRepository(db *gorm.DB) LayananRepository {
 	return &layananRepository{db}
 }
@@ -32,12 +31,15 @@ func (r *layananRepository) FindByID(id int) (*models.Product, error){
 	err := r.db.First(&product, id).Error
 	return &product, err
 }
+
 func (r *layananRepository) Create(product *models.Product) error{
 	return r.db.Create(product).Error
 }
+
 func (r *layananRepository) Update(id int, product *models.Product) error{
 	return r.db.Model(&models.Product{}).Where("id = ?", id).Updates(product).Error
 }
+
 func (r *layananRepository) Delete(id int) error{
 	return r.db.Delete(&models.Product{}, id).Error
 }
