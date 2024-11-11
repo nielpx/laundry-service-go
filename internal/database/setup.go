@@ -15,6 +15,7 @@ func ConnectDatabase() (*gorm.DB, error) {
 	}
 
 	database.AutoMigrate(&models.Product{})
+	database.AutoMigrate(&models.User{})
 
 	DB = database
 	return database, nil

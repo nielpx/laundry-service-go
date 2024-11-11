@@ -2,39 +2,48 @@ package middleware
 
 import (
     "net/http"
-    "strings"
+    "os"
 
     "github.com/gin-gonic/gin"
+    "github.com/golang-jwt/jwt/v5"
 )
 
-// Define the specific token you want to validate
-const validToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzA5NjYzMDUsInVzZXJuYW1lIjoidXNlcjEyMyJ9.NCAgvrE3S7uaINwVNeVX5lstPvY1hP_UYDs21PXXhbs"
+var secretKey = []byte(os.Getenv("SECRET"))
 
-// RequireAuth middleware checks for a valid token in the Authorization header
 func RequireAuth(c *gin.Context) {
-    // Get the Authorization header
-    authHeader := c.GetHeader("Authorization")
-    if authHeader == "" {
-        c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is required"})
+    // Get the cookie
+    tokenString, err := c.Cookie("Authorization")
+    if err != nil {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization cookie not found"})
         c.Abort()
         return
     }
 
-    // Check if the token is prefixed with "Bearer "
-    token := strings.TrimPrefix(authHeader, "Bearer ")
-    if token == "" {
-        c.JSON(http.StatusUnauthorized, gin.H{"error": "Bearer token is required"})
+    // validasi token
+    token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+        if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+            return nil, jwt.ErrSignatureInvalid
+        }
+        return secretKey, nil
+    })
+
+    if err != nil || !token.Valid {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
         c.Abort()
         return
     }
 
-    // Validate if the token matches the specified valid token
-    if token != validToken {
-        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+    // Ambil klaim
+    claims, ok := token.Claims.(jwt.MapClaims)
+    if !ok || !token.Valid {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
         c.Abort()
         return
     }
 
-    // Token is valid, continue to the next handler
+    username := claims["username"].(string)
+
+    // Set user 
+    c.Set("username", username)
     c.Next()
 }
