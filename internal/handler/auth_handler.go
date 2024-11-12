@@ -25,7 +25,6 @@ func checkPassword(hashedPassword, password string) bool {
 	return err == nil
 }
 
-var users = make(map[string]models.User)
 var secretKey = []byte(os.Getenv("SECRET"))
 
 func generateJWT(username string) (string, error) {
@@ -101,3 +100,4 @@ func LogIn(c *gin.Context) {
 	c.SetCookie("Authorization", token, 3600, "", "", false, true)
 	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "token": token})
 }
+

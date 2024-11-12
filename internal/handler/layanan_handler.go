@@ -60,14 +60,7 @@ func (h *LayananHandler) CreateLayanan(c *gin.Context){
 		return
 	}
 
-	// token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-	// 	"sub": products.Id,
-	// 	"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
-	// })
-	// tokenString, _ := token.SignedString([]byte(env.SECRET))
 	
-	// c.SetSameSite(http.SameSiteLaxMode)
-	// c.SetCookie("Authoratization", tokenString, 3600 * 24 * 30, "", "", false, true)
 
 	response := pkg.NewResponse(http.StatusCreated, "Laundry services created successfully", products)
 	c.JSON(http.StatusOK, response)
