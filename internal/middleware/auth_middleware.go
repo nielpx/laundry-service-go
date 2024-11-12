@@ -1,11 +1,12 @@
 package middleware
 
 import (
-    "net/http"
-    "os"
+	"net/http"
+	"os"
 
-    "github.com/gin-gonic/gin"
-    "github.com/golang-jwt/jwt/v5"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/sirupsen/logrus"
 )
 
 var secretKey = []byte(os.Getenv("SECRET"))
@@ -14,6 +15,7 @@ func RequireAuth(c *gin.Context) {
     // Get the cookie
     tokenString, err := c.Cookie("Authorization")
     if err != nil {
+        logrus.Error("Cookie doesn't exist")
         c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization cookie not found"})
         c.Abort()
         return
@@ -28,6 +30,7 @@ func RequireAuth(c *gin.Context) {
     })
 
     if err != nil || !token.Valid {
+        logrus.Error("Invalid or expired token claims")
         c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
         c.Abort()
         return
@@ -36,6 +39,7 @@ func RequireAuth(c *gin.Context) {
     // Ambil klaim
     claims, ok := token.Claims.(jwt.MapClaims)
     if !ok || !token.Valid {
+        logrus.Error("Invalid token claims")
         c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
         c.Abort()
         return

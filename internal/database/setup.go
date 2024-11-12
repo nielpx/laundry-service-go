@@ -2,6 +2,9 @@ package database
 
 import (
 	"golang-gorm-gin/internal/models"
+	"os"
+
+	"github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -9,8 +12,9 @@ import (
 var DB *gorm.DB
 
 func ConnectDatabase() (*gorm.DB, error) {
-	database, err := gorm.Open(mysql.Open("root:@tcp(localhost:3306)/go_crud"))
+	database, err := gorm.Open(mysql.Open(os.Getenv("ADDRESS")))
 	if err != nil{
+		logrus.Error("Failed to open connection")
 		panic(err)
 	}
 

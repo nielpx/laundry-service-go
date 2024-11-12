@@ -10,15 +10,23 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
+func init() {
+	logrus.SetFormatter(&logrus.TextFormatter{
+		ForceColors: true,
+		FullTimestamp: true,
+	})
+	pkg.LoadEnv()
+}
 
 func main() {
-	pkg.LoadEnv()
-
 	r := gin.Default()
+	logrus.Info("Menginisilisi")
 	db, err := database.ConnectDatabase()
 	if err != nil{
+		logrus.Error("Can't connect to the database")
 		log.Fatalf("Tidak bisa terhubung ke database %v", err)
 	}
 
@@ -35,5 +43,6 @@ func main() {
 	r.PUT("/laundry-services/:id",middleware.RequireAuth, layananHandler.UpdateLayanan)
 	r.DELETE("/laundry-services/:id", middleware.RequireAuth, layananHandler.DeleteLayanan)
 
+	logrus.Info("Koneksi berhasil")
 	r.Run()
 }
