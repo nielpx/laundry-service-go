@@ -1,0 +1,259 @@
+basePath: /
+definitions:
+  models.Product:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price_per_kg:
+        type: number
+    type: object
+  models.User:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  pkg.NilResponse:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  pkg.SuccessResponse:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server for managing products.
+  title: Golang CRUD API
+  version: "1.0"
+paths:
+  /laundry-services:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all laundry services
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pkg.SuccessResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pkg.NilResponse'
+      summary: Get all laundry services
+      tags:
+      - LaundryServices
+    post:
+      consumes:
+      - application/json
+      description: Add a new laundry service
+      parameters:
+      - description: Laundry Service Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.Product'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/pkg.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkg.NilResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pkg.NilResponse'
+      summary: Create a new laundry service
+      tags:
+      - LaundryServices
+  /laundry-services/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a specific laundry service by ID
+      parameters:
+      - description: Laundry Service ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pkg.SuccessResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pkg.NilResponse'
+      summary: Delete a laundry service
+      tags:
+      - LaundryServices
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific laundry service by its ID
+      parameters:
+      - description: Laundry Service ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pkg.SuccessResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pkg.NilResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pkg.NilResponse'
+      summary: Get a laundry service by ID
+      tags:
+      - LaundryServices
+    put:
+      consumes:
+      - application/json
+      description: Update laundry service by ID
+      parameters:
+      - description: Laundry Service ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated Laundry Service Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pkg.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkg.NilResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pkg.NilResponse'
+      summary: Update an existing laundry service
+      tags:
+      - LaundryServices
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate a user and return a JWT token
+      parameters:
+      - description: User login data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response with token
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized - Invalid credentials
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Log in a user
+      tags:
+      - Authentication
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account
+      parameters:
+      - description: User registration data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response when user created successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Conflict - Username already taken
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register a new user
+      tags:
+      - Authentication
+swagger: "2.0"
